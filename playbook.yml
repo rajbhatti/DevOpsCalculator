@@ -1,7 +1,0 @@
----
-- name: Copy jar file to remoter server
-  hosts: localhost
-  tasks:
-    - copy:
-        src: ./target/DevOpsCalculator-1.0-SNAPSHOT-jar-with-dependencies.jar
-        dest: ~/
