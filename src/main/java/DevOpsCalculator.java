@@ -1,7 +1,5 @@
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.math.BigInteger;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -19,7 +17,7 @@ public class DevOpsCalculator {
 
         do{
             System.out.println("Calculator-DevOps, Choose to perform operation");
-            System.out.print("Press 1 for Square Root\n Press 2 for Factorial\n Press 3 for Log\n Press 4 for Power\n"+
+            System.out.print("Press 1 for Square Root\nPress 2 for Factorial\nPress 3 for Log\nPress 4 for Power\n"+
                     "Press 5 for Exit\n");
             System.out.print("Enter Your Choice:");
             int choice;
@@ -27,11 +25,12 @@ public class DevOpsCalculator {
             try{
                 choice=scanner.nextInt();
             }catch(InputMismatchException error){
-                logger.error("Invalid input, Entered choice is not a number");
+                logger.error("Invalid input,Entered choice is not a number");
                 return;
             }
             if(choice==5){
                 System.out.println("Exiting");
+                logger.info("Exiting");
                 return;
             }
             try{
@@ -43,16 +42,16 @@ public class DevOpsCalculator {
             }
             switch (choice){
                 case 1:
-                    result=calculator.Sqrt(number1);
-                    System.out.println("Square root of "+ number1+" is :"+ result);
+                    result=calculator.sqrt(number1);
+                    System.out.println("Square root of "+ number1+" is : "+ result);
                     break;
                 case 2:
                     result=calculator.factorial(number1);
-                    System.out.println("Factorial of "+ number1+" is :"+ result);
+                    System.out.println("Factorial of "+ number1+" is : "+ result);
                     break;
                 case 3:
                     result=calculator.naturalLog(number1);
-                    System.out.println("Natural Log(Base e) of "+ number1+" is :"+ result);
+                    System.out.println("Natural Log(Base e) of "+ number1+" is : "+ result);
                     break;
                 case 4:
                     try{
@@ -63,10 +62,11 @@ public class DevOpsCalculator {
                         return;
                     }
                     result=calculator.power(number1,number2);
-                    System.out.println("Power of "+ number1+" and " +number2+ " is :"+ result);
+                    System.out.println(number1+" Power "+number2+ " is : "+ result);
                     break;
                 default:
                     System.out.println("Invalid choice");
+                    logger.info("Invalid choice");
                     break;
             }
         }while (true);
@@ -74,34 +74,56 @@ public class DevOpsCalculator {
 
     }
 
-    private  double power(double number1,double number2){
-        logger.info("[Power of] - "+number1 +", "+number2 );
+    public double power(double number1,double number2){
+        logger.info("[Power of] :"+number1 +", "+number2 );
         double result= Math.pow(number1,number2);
-        logger.info("[Result - Power]"+result);
+        logger.info("[Result of Power]"+result);
         return result;
     }
-    private double naturalLog(double number1) {
-        logger.info("[Natural Log of] - "+number1);
+    public double naturalLog(double number1) {
+        logger.info("[Natural Log of] : "+number1);
         double result= Math.log(number1);
-        logger.info("[Result - Log]"+result);
+        logger.info("[Result of Log]"+result);
         return result;
     }
 
-    private double factorial(double number1) {
-        if(number1<0){
-            return Double.NaN;
+    public double factorial(double number1) {
+        logger.info("[Factorial of] :"+number1);
+        double result = 1;
+        try{
+            if(number1 != (int)number1){
+                result = Double.NaN;
+            }
+            if(number1==Double.POSITIVE_INFINITY){
+                result=Double.POSITIVE_INFINITY;
+            }
+            if(number1 < 0) {
+                result = Double.NaN;
+                throw new ArithmeticException("Case of NaN if < 0");
+            }
+
+            if(number1 == 0 || number1 == 1) {
+                return 1;
+            }
+
+            for(int i = 1; i <= number1; i++){
+                result *= i;
+            }
         }
-        if (number1 <= 1)
-            return 1;
-        else
-            return number1 * factorial(number1-1);
+        catch(ArithmeticException error) {
+            logger.error("Number cannot be negative " + error.getMessage());
+        }
+        finally {
+            logger.info("Result of factorial is: " + result);
+        }
+        return result;
     }
 
 
-    private double Sqrt(double number1) {
-        logger.info("[Square root of] - "+number1);
+    public double sqrt(double number1) {
+        logger.info("[Square root of] : "+number1);
         double result= Math.sqrt(number1);
-        logger.info("[Result - Square Root]"+result);
+        logger.info("[Result of Square Root]"+result);
         return result;
     }
 }
